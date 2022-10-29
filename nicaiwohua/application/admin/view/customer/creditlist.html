@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="/static/admin/css/pintuer.css">
+<link rel="stylesheet" href="/static/admin/css/admin.css">
+<script src="/static/admin/js/jquery.js"></script>
+<script src="/static/admin/js/pintuer.js"></script>
+</head>
+<body>
+
+  <div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder"> 会员 {$userid} {$nickname} 积分列表</strong> <a href="" style="float:right; display:none;">添加字段</a></div>
+    <div class="padding border-bottom">
+      <ul class="search" style="padding-left:10px;">
+        
+        
+        
+        <li>
+          <form action="">
+          
+          <select name="type" class="input" style="width:250px; line-height:17px;display:inline-block" >
+          	<option value='-1' {$type==-1?'selected':''}>全部</option>
+          	<option value='0' {$type==0?'selected':''}>增加</option>
+          	<option value='1' {$type==1?'selected':''}>减少</option>
+          </select>
+          <button class="button border-main icon-search"> 搜索</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+    
+    
+    <table class="table table-hover text-center">
+      <tr>
+        <th width="100" style="text-align:left; padding-left:20px;">ID</th>
+        <th>积分数量</th>
+        <th>类型</th>
+        <th>时间</th>
+        <th>备注</th>
+      </tr>
+      {volist name="data" id="value"}
+        <tr>
+          <td style="text-align:left; padding-left:20px;">
+          {$value['id']}</td>
+          <td>
+            {$value['num']}
+          </td>
+          
+          {switch name="value.type"}
+            {case value="0"}
+              <td>增加</td>
+            {/case}
+            {case value="1"}
+              <td>减少</td>
+            {/case}
+            {default /}<td>未知</td>
+          {/switch}
+          
+          
+          
+          
+
+          <td>
+          {:date("Y-m-d H:i:s",$value['time'])}</td>
+          <td>
+            {$value['info']}
+          </td>
+
+          
+        </tr>
+      {/volist}
+  
+      <tr>
+        <td colspan="10"><div class="pagelist"> 
+          {$data->render()}
+        </div></td>
+      </tr>
+    </table>
+    
+  </div>
+
+</body>
+</html>

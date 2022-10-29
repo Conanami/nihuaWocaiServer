@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="/static/admin/css/pintuer.css">
+<link rel="stylesheet" href="/static/admin/css/admin.css">
+<script src="/static/admin/js/jquery.js"></script>
+<script src="/static/admin/js/pintuer.js"></script>
+</head>
+<body>
+
+  <div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder"> <i>{$user['nickName']}</i> 的作品列表</strong> <a href="" style="float:right; display:none;">添加字段</a></div>
+    <div class="padding border-bottom">
+      <ul class="search" style="padding-left:10px;">
+        
+        <li>搜索：</li>
+        
+        <li>
+          <form action="">
+          <input type="text" placeholder="请输入搜索关键字" name="search" class="input" style="width:250px; line-height:17px;display:inline-block" value="{$search}"/>
+          <button class="button border-main icon-search"> 搜索</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+    
+    
+    <table class="table table-hover text-center">
+      <tr>
+        <th width="100" style="text-align:left; padding-left:20px;">ID</th>
+        <th>作品作者</th>
+        <th>作品题目</th>
+        <th>绘画作品</th>
+        <th>创建时间</th>
+        <th>浏览量</th>
+        <th>点赞量</th>
+        <th>是否推荐</th>
+        
+      </tr>
+      {volist name="data" id="value"}
+        <tr>
+          <td style="text-align:left; padding-left:20px;">
+          {$value['id']}</td>
+          <td>
+            <a href="{:url('works/index',['u_id'=>$value['user_id']])}">
+              {$value['nickName']}
+            </a>
+          </td>
+          <td>
+            <a href="{:url('works/index',['p_id'=>$value['project_id']])}">
+              {$value['name']}
+            </a>
+          </td>
+          <td>
+            <img width="50px"  src="/upload/works/{$value['img']}">
+          </td>
+          <td>
+            {:date("Y-m-d H:i:s",$value['create_time'])}
+          </td>
+          <td>
+            {$value['pageView']}
+          </td>
+          <td>
+            {$value['praiseNum']}
+          </td>
+          <td>
+            {if condition="$value['tuijian']"}
+              <a class="button border-green" href="{:url('works/save_status',['id'=>$value['id'],'tuijian'=>0])}">推荐</a>
+            {else /}
+              <a class="button border-red" href="{:url('works/save_status',['id'=>$value['id'],'tuijian'=>1])}">不推荐</a>
+            {/if}
+          </td>
+          
+          
+        </tr>
+      {/volist}
+      
+  
+      <tr>
+        <td colspan="8"><div class="pagelist"> 
+          {$data->render()}
+        </div></td>
+      </tr>
+    </table>
+    
+  </div>
+
+</body>
+</html>

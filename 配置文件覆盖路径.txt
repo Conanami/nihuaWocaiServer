@@ -1,0 +1,5 @@
+php.ini 
+D:\wamp\bin\php\php7.0.10
+
+httpd-vhosts.conf
+wamp\bin\apache\apache2.4.23\conf\extra\httpd-vhosts.conf

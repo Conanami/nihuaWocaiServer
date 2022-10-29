@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="/static/admin/css/pintuer.css">
+<link rel="stylesheet" href="/static/admin/css/admin.css">
+<script src="/static/admin/js/jquery.js"></script>
+<script src="/static/admin/js/pintuer.js"></script>
+</head>
+<body>
+
+  <div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder"> 会员列表</strong> <a href="" style="float:right; display:none;">添加字段</a></div>
+    <div class="padding border-bottom">
+      <ul class="search" style="padding-left:10px;">
+        
+        <li>搜索：</li>
+        
+        <li>
+          <form action="">
+          <input type="text" placeholder="请输入搜索关键字" name="search" class="input" style="width:250px; line-height:17px;display:inline-block" value="{$_GET['search']?$_GET['search']:''}"/>
+          <button class="button border-main icon-search"> 搜索</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+    
+    
+    <table class="table table-hover text-center">
+      <tr>
+        <th width="100" style="text-align:left; padding-left:20px;">ID</th>
+        <th>openID</th>
+        <th>
+          会员昵称
+        </th>
+        <th>会员头像</th>
+        <th>会员性别</th>
+        <th>所在地区</th>
+        <th>注册时间</th>
+        <th>会员状态</th>
+        <th>会员积分</th>
+        <th>操作</th>
+      </tr>
+      {volist name="data" id="value"}
+        <tr>
+          <td style="text-align:left; padding-left:20px;">
+          {$value['id']}</td>
+          <td>
+            {$value['openid']}
+          </td>
+          <td>
+            <a href="{:url('works/userlist',['u_id'=>$value['id']])}">
+            {$value['nickName']}
+            </a>
+          </td>
+          <td>
+            <img width="50px" src="{$value['headImg']}">
+          </td>
+          {switch name="value.sex"}
+            {case value="0"}
+              <td>男</td>
+            {/case}
+            {case value="1"}
+              <td>女</td>
+            {/case}
+            {default /}<td>未知</td>
+          {/switch}
+          <td>
+            {$value['country']}
+            {$value['province']}
+            {$value['city']}
+            {$value['area']}
+          </td>
+
+          <td>
+          {:date("Y-m-d H:i:s",$value['time'])}</td>
+          
+          <td>
+            {if condition="$value['status']"}
+              <a class="button border-red" href="{:url('Admin/save_status',['id'=>$value['id'],'status'=>0])}">黑名单</a>
+            {else /}
+              <a class="button border-green" href="{:url('Admin/save_status',['id'=>$value['id'],'status'=>1])}">白名单</a>
+            {/if}
+          </td>
+          <td>
+            {$value['credit']}
+          </td>
+          <td>
+            <a class="button border-main" href="{:url('customer/creditlist',['id'=>$value['id']])}">查看积分</a>
+          </td>
+        </tr>
+      {/volist}
+  
+      <tr>
+        <td colspan="10"><div class="pagelist"> 
+          {$data->render()}
+        </div></td>
+      </tr>
+    </table>
+    
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="/static/admin/css/pintuer.css">
+<link rel="stylesheet" href="/static/admin/css/admin.css">
+<script src="/static/admin/js/jquery.js"></script>
+<script src="/static/admin/js/pintuer.js"></script>
+</head>
+<body>
+
+  <div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder"> 答题列表</strong> <a href="" style="float:right; display:none;">添加字段</a></div>
+    <div class="padding border-bottom">
+      <ul class="search" style="padding-left:10px;">
+        
+        <li>搜索：</li>
+        
+        <li>
+          <form action="">
+          <input type="text" placeholder="请输入搜索答案的关键字" name="search" class="input" style="width:250px; line-height:17px;display:inline-block" value="{$search}"/>
+          <button class="button border-main icon-search"> 搜索</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+    
+    
+    <table class="table table-hover text-center">
+      <tr>
+        <th width="100" style="text-align:left; padding-left:20px;">ID</th>
+        <th>作品题目</th>
+        <th>绘画作品</th>
+        <th>答题者</th>
+        <th>回答时间</th>
+        <th>答案</th>
+        <th>是否正确</th>
+      </tr>
+      
+      {volist name="data" id="value"}
+        <tr>
+          <td style="text-align:left; padding-left:20px;">
+          {$value['id']}</td>
+          
+          <td>
+            {$value['name']}
+          </td>
+          <td>
+            <img width="50px"  src="/upload/works/{$value['img']}">
+          </td>
+          <td>
+            {$value['nickName']}
+          </td>
+          <td>
+            {:date("Y-m-d H:i:s",$value['time'])}
+          </td>
+          <td>
+            {$value['text']}
+          </td>
+          
+          <td>
+            {if condition="$value['isOk']"}
+              <a class="button border-green" href="">正确</a>
+            {else /}
+              <a class="button border-red" href="">错误</a>
+            {/if}
+          </td>
+          
+          
+        </tr>
+      {/volist}
+  
+      <tr>
+        <td colspan="7"><div class="pagelist"> 
+          {$data->render()}
+        </div></td>
+      </tr>
+    </table>
+    
+  </div>
+
+</body>
+</html>

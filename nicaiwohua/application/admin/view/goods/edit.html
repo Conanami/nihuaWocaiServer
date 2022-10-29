@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="/static/admin/css/pintuer.css">
+<link rel="stylesheet" href="/static/admin/css/admin.css">
+<script src="/static/admin/js/jquery.js"></script>
+<script src="/static/admin/js/pintuer.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head"><strong>修改商品</strong></div>
+  <div class="body-content">
+    <form method="post" class="form-x" enctype="multipart/form-data" action="{:url('goods/save')}">
+      <div class="form-group">
+        <div class="label">
+          <label for="sitename">商品名：</label>
+        </div>
+        <div class="field">
+          <div class="field">
+            <input type="text" class="input w50" id="goods_name" name="goods_name" size="50" placeholder="请输入商品名" data-validate="required:请输入商品名" 
+            value="{$data['goods_name']}"/>       
+          </div>
+        </div>
+      </div>
+      <input type="hidden" name="id" value="{$data['id']}">      
+      <div class="form-group">
+        <div class="label">
+          <label for="sitename">商品简介：</label>
+        </div>
+        <div class="field">
+          <div class="field">
+            <input type="text" class="input w50" id="goods_info" name="goods_info" size="50" placeholder="请输入商品详情" data-validate="required:请输入商品详情" 
+            value="{$data['goods_info']}"  />       
+          </div>
+        </div>
+      </div>   
+      <div class="form-group">
+        <div class="label">
+          <label for="sitename">兑换积分：</label>
+        </div>
+        <div class="field">
+          <div class="field">
+            <input type="number" class="input w50" id="price" name="price" size="50" placeholder="请输入商品兑换积分" data-validate="required:请输入商品兑换积分" 
+            value="{$data['price']}"/>       
+          </div>
+        </div>
+      </div>   
+      <div class="form-group">
+        <div class="label">
+          <label for="sitename">是否上下架：</label>
+        </div>
+        <div class="field">
+          <div class="field" style="line-height: 33px">
+            {if condition="$data['is_shelf']"}
+              <label>
+                <input checked type="radio" name="is_shelf" value="1">上架
+              </label>
+              <label>
+                <input type="radio" name="is_shelf" value="0">下架
+              </label>
+            {else/}
+              <label>
+                <input type="radio" name="is_shelf" value="1">上架
+              </label>
+              <label>
+                <input checked type="radio" name="is_shelf" value="0">下架
+              </label>
+            {/if}       
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label for="sitename">商品库存：</label>
+        </div>
+        <div class="field">
+          <div class="field">
+            <input type="number" class="input w50" id="stock" name="stock" size="50" placeholder="请输入商品库存" data-validate="required:请输入商品库存" 
+            value="{$data['stock']}"/>       
+          </div>
+        </div>
+      </div> 
+      <div class="form-group">
+        <div class="label">
+          <label for="sitename">封面图片：</label>
+        </div>
+        <input type="hidden" name="img" value="{$data['img']}">
+        <div class="field">
+          <div class="field">
+            <input type="file" name="img" onchange="uploads(this)" accept="image/jpeg" id="fmInput" style="display: none">   
+            <button type="button" id="fmBtn" class="button border-main">文件上传</button>   
+            <div id="fmDiv">
+              {if condition="$data['img']"}
+                <img src="/upload/goods/{$data['img']}" width=200px>
+              {/if}
+              
+            </div>
+          </div>
+        </div>
+      </div> 
+      <div class="form-group">
+        <div class="label">
+          <label for="sitename">商品更多图片：</label>
+        </div>
+        <style type="text/css">
+          #fmDiv2 div{
+            width: 120px;
+            height: 120px;
+            display: inline-block;
+            float: left;
+          }
+          #fmDiv2 div img{
+            width: 100%;
+            height: 100%;
+            border: 1px solid #03b6fd;
+            box-sizing: border-box;
+          }
+          #fmDiv2 #fmBtn2{
+            font-size: 30px;
+            text-align: center;
+            line-height: 120px;
+            border: 1px dashed #03b6fd;
+            box-sizing: border-box;
+            cursor: pointer;
+          }
+          
+        </style>
+        <input type="hidden" id="oldDuo" name="oldDuo" value="{$data['imgs']}">
+        <input type="hidden" id="delDuo" name="delDuo" value="">
+        <div class="field">
+          <div class="field" id="duofile">
+            <input type="file" name="imgs[]" class="duo" onchange="uploadlist(this)" accept="image/jpeg" id="fmInput2" style="display: none">   
+               
+            <div id="fmDiv2">
+                {volist name="data.imgArr" id="val"}
+                  {if condition="$val neq ''"}
+                  <div ondblclick="shanchu(this,'{$val}')"><img src="/upload/goods/{$val}"></div>
+                  {/if}
+
+                {/volist}
+            
+              <div id="fmBtn2">+</div>
+              
+            </div>   
+          </div>
+        </div>
+        <script>
+          //双击删除一个老的图片
+          function shanchu(obj,url)
+          {
+            $(obj).remove();
+            console.log(url);
+            //把删掉的图片加入delDuo的隐藏域
+            //如果是空就直接加入，如果有东西就要先加一个逗号，然后加入
+            //类似 [1.jpg,2.jpg] 这种样子
+            let str=$("#delDuo").val()+($("#delDuo").val()==""?"":",")+url;
+            $("#delDuo").val(str);
+
+            //把图片从oldDuo的隐藏域中去掉，oldDuo是要保留下的图片
+            //先在最后加一个逗号
+            let oldDuo=$("#oldDuo").val()+",";
+            //然后根据把删除的"xxx.jpg,"去掉
+            let str2=oldDuo.replace(url+",","");
+            //然后再把最后一个逗号也去掉
+            str2=str2.substr(0,str2.length-1);
+            //就是去掉后的oldDuo了
+            $("#oldDuo").val(str2);
+          }
+
+        </script>
+      </div>   
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <button class="button bg-main icon-check-square-o" type="submit"> 提交</button>   
+        </div>
+      </div>      
+    </form>
+  </div>
+</div>
+</body></html>
+<script>
+  //点击上传封面图片
+  $("#fmBtn").click(function(){
+    $("#fmInput").click();
+  });
+
+  //封面图片被选择
+  function uploads(obj)
+  {
+    //console.log(1111);
+    var file=obj.files[0];
+
+    //console.log(Window.FileReader);
+    if(window.FileReader)
+    {
+      var reader=new FileReader();
+      reader.readAsDataURL(file);
+      //监听文件加载后事件
+      reader.onloadend = function(e) {
+        $("#fmDiv").html(`<img style="width:200px"  src='${e.target.result}'>`);
+      };
+    }
+  };
+
+  //多文件上传的写法
+  $("#fmBtn2").click(function()
+  {
+    //只能是最后一个新加出来的点击才算
+    //防止前面的被点两次
+    $(".duo").eq($(".duo").length-1).click();
+  });
+
+  function uploadlist(obj){
+    // 获取表单上传文件
+    //console.log(1111);
+    var file=obj.files[0];
+
+    //console.log(Window.FileReader);
+    if(window.FileReader)
+    {
+      var reader=new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = function(e) {
+        $("#fmBtn2").before(`<div ondblclick="del(this)"><img src="${e.target.result}"></div>`);
+        $("#duofile").append(`<input type="file" name="imgs[]" class="duo" onchange="uploadlist(this)" accept="image/jpeg" id="fmInput2" style="display: none">`);
+      };
+    }
+  }
+
+  //多图删除功能，这是删除新添加的图片，也是需要的
+  function del(obj)
+  {
+    //图片删掉
+    console.log($(obj));
+    let idx = $(obj).index("input");
+    $(obj).remove();
+    //相应的input框也删掉
+    $(".duo").eq(idx).remove();
+  }
+
+
+</script>
